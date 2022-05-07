@@ -1,5 +1,5 @@
 #include <iostream>
-using namespace std;
+#include <ncurses.h>
 bool gameOver;
 const int width = 20;
 const int height = 20;
@@ -12,45 +12,85 @@ void Setup()
   dir = STOP;
   x = width / 2;
   y = height / 2;
-  fruitX = rand() % width;
-  fruitY = rand() % height;
+  fruitX = std::rand() % width;
+  fruitY = std::rand() % height;
   score = 0;
 }
 void Draw()
 {
-  system("clear");
+  std::system("clear");
   for (int i = 0; i < width + 1; i++)
-    cout << "#";
-  cout << endl;
+    std::cout << "#";
+  std::cout << std::endl;
 
   for (int i = 0; i < height; i++)
   {
     for (int j = 0; j < width; j++)
     {
       if (j == 0)
-        cout << "#";
+        std::cout << "#";
       if (i == y && j == x)
-       cout << "O";
+        std::cout << "O";
       else if (i == fruitY && j == fruitX)
-        cout << "F";
+        std::cout << "F";
       else
-        cout << " ";
+        std::cout << " ";
       if (j == width - 1)
-        cout << "#";
+        std::cout << "#";
     }
-    cout << endl;
+    std::cout << std::endl;
   }
   for (int i = 0; i < width + 1; i++)
-    cout << "#";
-  cout << endl;
+    std::cout << "#";
+  std::cout << std::endl;
 }
 void Input()
 {
-
+    initscr();
+    cbreak();
+    noecho();
+    scrollok(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    if (true) {
+      switch (getch())
+      {
+        case 'a':
+          dir = LEFT;
+          break;
+        case 'd':
+          dir = RIGHT;
+          break;
+        case 'w':
+          dir = UP;
+          break;
+        case 's':
+          dir = DOWN;
+          break;
+        case 'x':
+          gameOver = true;
+          break;
+      }
+    }
 }
 void Logic()
 {
-
+  switch (dir)
+  {
+    case LEFT:
+      x--;
+      break;
+    case RIGHT:
+      x++;
+      break;
+    case UP:
+      y++;
+      break;
+    case DOWN:
+      y--;
+      break;
+    default:
+      break;
+  }
 }
 int main()
 {
